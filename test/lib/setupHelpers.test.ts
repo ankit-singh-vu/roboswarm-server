@@ -86,8 +86,8 @@ describe("lib/setupHelpers", () => {
 
     describe("processDeprovisionEvent", () => {
         let baseDeprovisionEvent: DeprovisionEvent;
-        let machineDeprovisionStub: Sinon.SinonStub;
-        let sshKeyDeprovisionStub: Sinon.SinonStub;
+        let machineDeprovisionStub: sinon.SinonStub;
+        let sshKeyDeprovisionStub: sinon.SinonStub;
 
         beforeEach(() => {
             baseDeprovisionEvent = {
@@ -187,7 +187,7 @@ describe("lib/setupHelpers", () => {
         });
 
         it("drops the event if max tries has been exceeded", async () => {
-            const cleanupStub: Sinon.SinonStub = sandbox.stub(swarmProvisionEvents, "cleanUpSwarmProvisionEvent").resolves();
+            const cleanupStub: sinon.SinonStub = sandbox.stub(swarmProvisionEvents, "cleanUpSwarmProvisionEvent").resolves();
             const dropEvent: SwarmProvisionEvent = {
                 ...baseSwarmProvisionEvent,
                 currentTry: 20
@@ -199,7 +199,7 @@ describe("lib/setupHelpers", () => {
 
         it("it sleeps, increments, and re-enqueues the event if an error is thrown", async () => {
             sandbox.stub(Swarm, "provision").throws();
-            const sleepStub: Sinon.SinonStub = sandbox.stub(lib, "asyncSleep").resolves();
+            const sleepStub: sinon.SinonStub = sandbox.stub(lib, "asyncSleep").resolves();
             const sleepEvent: SwarmProvisionEvent = {
                 ...baseSwarmProvisionEvent,
                 currentTry: 0
@@ -212,7 +212,7 @@ describe("lib/setupHelpers", () => {
 
         describe("CREATE", () => {
             it("provisions the swarm", async () => {
-                const provisionStub: Sinon.SinonStub = sandbox.stub(Swarm, "provision").resolves();
+                const provisionStub: sinon.SinonStub = sandbox.stub(Swarm, "provision").resolves();
                 const createEvent: SwarmProvisionEvent = {
                     ...baseSwarmProvisionEvent
                 };
@@ -246,7 +246,7 @@ describe("lib/setupHelpers", () => {
                     destroyed_at: undefined
                 } as Swarm.Swarm);
                 sandbox.stub(Swarm, "swarmReady").resolves(true);
-                const readyAtStub: Sinon.SinonStub = sandbox.stub(Swarm, "setReadyAt");
+                const readyAtStub: sinon.SinonStub = sandbox.stub(Swarm, "setReadyAt");
                 const swarmReadyEvent: SwarmProvisionEvent = {
                     ...baseSwarmProvisionEvent,
                     stepToExecute: SwarmSetupStep.READY
@@ -261,7 +261,7 @@ describe("lib/setupHelpers", () => {
                     destroyed_at: undefined
                 } as Swarm.Swarm);
                 sandbox.stub(Swarm, "swarmReady").resolves(false);
-                const readyAtStub: Sinon.SinonStub = sandbox.stub(Swarm, "setReadyAt");
+                const readyAtStub: sinon.SinonStub = sandbox.stub(Swarm, "setReadyAt");
                 const swarmReadyEvent: SwarmProvisionEvent = {
                     ...baseSwarmProvisionEvent,
                     stepToExecute: SwarmSetupStep.READY
@@ -313,7 +313,7 @@ describe("lib/setupHelpers", () => {
                     port_open_complete: false,
                     dependency_install_complete: false,
                 });
-                const updateIsMasterStub: Sinon.SinonStub = sandbox.stub(Machine, "updateIsMaster").resolves();
+                const updateIsMasterStub: sinon.SinonStub = sandbox.stub(Machine, "updateIsMaster").resolves();
                 const startMasterEvent: SwarmProvisionEvent = {
                     ...baseSwarmProvisionEvent,
                     stepToExecute: SwarmSetupStep.START_MASTER
@@ -330,9 +330,9 @@ describe("lib/setupHelpers", () => {
 
         describe("STOP_SWARM", () => {
             it("does nothing if the swarm is already destroyed", async () => {
-                const destroyByIdStub: Sinon.SinonStub = sandbox.stub(Swarm, "destroyById").resolves();
-                const shouldStopStub: Sinon.SinonStub = sandbox.stub(Swarm, "shouldStop").resolves();
-                const getByIdStub: Sinon.SinonStub = sandbox.stub(Swarm, "getById").resolves({
+                const destroyByIdStub: sinon.SinonStub = sandbox.stub(Swarm, "destroyById").resolves();
+                const shouldStopStub: sinon.SinonStub = sandbox.stub(Swarm, "shouldStop").resolves();
+                const getByIdStub: sinon.SinonStub = sandbox.stub(Swarm, "getById").resolves({
                     status: Status.destroyed
                 } as Swarm.Swarm);
                 const stopEvent: SwarmProvisionEvent = {
@@ -347,9 +347,9 @@ describe("lib/setupHelpers", () => {
             });
 
             it("destroys the swarm", async () => {
-                const destroyByIdStub: Sinon.SinonStub = sandbox.stub(Swarm, "destroyById").resolves();
-                const shouldStopStub: Sinon.SinonStub = sandbox.stub(Swarm, "shouldStop").resolves(true);
-                const getByIdStub: Sinon.SinonStub = sandbox.stub(Swarm, "getById").resolves({
+                const destroyByIdStub: sinon.SinonStub = sandbox.stub(Swarm, "destroyById").resolves();
+                const shouldStopStub: sinon.SinonStub = sandbox.stub(Swarm, "shouldStop").resolves(true);
+                const getByIdStub: sinon.SinonStub = sandbox.stub(Swarm, "getById").resolves({
                     status: Status.ready
                 } as Swarm.Swarm);
                 const stopEvent: SwarmProvisionEvent = {
@@ -364,9 +364,9 @@ describe("lib/setupHelpers", () => {
             });
 
             it("delays for 10 seconds if the swarm is not ready to be destroyed", async () => {
-                const destroyByIdStub: Sinon.SinonStub = sandbox.stub(Swarm, "destroyById").resolves();
-                const shouldStopStub: Sinon.SinonStub = sandbox.stub(Swarm, "shouldStop").resolves(false);
-                const getByIdStub: Sinon.SinonStub = sandbox.stub(Swarm, "getById").resolves({
+                const destroyByIdStub: sinon.SinonStub = sandbox.stub(Swarm, "destroyById").resolves();
+                const shouldStopStub: sinon.SinonStub = sandbox.stub(Swarm, "shouldStop").resolves(false);
+                const getByIdStub: sinon.SinonStub = sandbox.stub(Swarm, "getById").resolves({
                     status: Status.ready
                 } as Swarm.Swarm);
                 const stopEvent: SwarmProvisionEvent = {
@@ -429,7 +429,7 @@ describe("lib/setupHelpers", () => {
         });
 
         it("drops the event if max tries has been exceeded", async () => {
-            const createExternalMachineStub: Sinon.SinonStub = sandbox.stub(Machine, "createExternalMachine").resolves();
+            const createExternalMachineStub: sinon.SinonStub = sandbox.stub(Machine, "createExternalMachine").resolves();
             const dropEvent: MachineProvisionEvent = {
                 ...baseMachineProvisionEvent,
                 currentTry: 20
@@ -440,7 +440,7 @@ describe("lib/setupHelpers", () => {
 
         it("it sleeps, increments, and re-enqueues the event if an error is thrown", async () => {
             sandbox.stub(Machine, "createExternalMachine").throws();
-            const sleepStub: Sinon.SinonStub = sandbox.stub(lib, "asyncSleep").resolves();
+            const sleepStub: sinon.SinonStub = sandbox.stub(lib, "asyncSleep").resolves();
             const sleepEvent: MachineProvisionEvent = {
                 ...baseMachineProvisionEvent,
                 currentTry: 0
@@ -453,7 +453,7 @@ describe("lib/setupHelpers", () => {
 
         describe("CREATE", () => {
             it("creates the external machine", async () => {
-                const createStub: Sinon.SinonStub = sandbox.stub(Machine, "createExternalMachine").resolves({} as DropletResponse);
+                const createStub: sinon.SinonStub = sandbox.stub(Machine, "createExternalMachine").resolves({} as DropletResponse);
                 const createEvent: MachineProvisionEvent = {
                     ...baseMachineProvisionEvent
                 };
@@ -468,8 +468,8 @@ describe("lib/setupHelpers", () => {
             });
 
             it("removes the machine reference from the swarm if creation fails", async () => {
-                const createStub: Sinon.SinonStub = sandbox.stub(Machine, "createExternalMachine").resolves(false);
-                const swarmUpdateStub: Sinon.SinonStub = sandbox.stub(Swarm, "update").resolves();
+                const createStub: sinon.SinonStub = sandbox.stub(Machine, "createExternalMachine").resolves(false);
+                const swarmUpdateStub: sinon.SinonStub = sandbox.stub(Swarm, "update").resolves();
                 const createEvent: MachineProvisionEvent = {
                     ...baseMachineProvisionEvent,
                     swarm: {
@@ -565,7 +565,7 @@ describe("lib/setupHelpers", () => {
             it("sleeps for 15 seconds if the machine is not ready and it should not deprovision", async () => {
                 const machineReadyStub = sandbox.stub(Machine, "isReady").resolves(false);
                 const shouldDeprovisionStub = sandbox.stub(Machine, "shouldDeprovision").resolves(false);
-                const sleepStub: Sinon.SinonStub = sandbox.stub(lib, "asyncSleep").resolves();
+                const sleepStub: sinon.SinonStub = sandbox.stub(lib, "asyncSleep").resolves();
                 const readyEvent: MachineProvisionEvent = {
                     ...baseMachineProvisionEvent,
                     stepToExecute: MachineSetupStep.MACHINE_READY
