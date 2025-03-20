@@ -59,39 +59,42 @@ export async function getUserSubscription(user: User.User): Promise<Stripe.Subsc
 }
 
 export async function setStripePlan(userId: number, planName: string): Promise<void> {
-    const stripe = new Stripe(process.env.ROBOSWARM__STRIPE_API_SECRET, config);
+    // const stripe = new Stripe(process.env.ROBOSWARM__STRIPE_API_SECRET, config);
     const user: User.User = await User.getById(userId);
-    const subscriptionListOptions: Stripe.SubscriptionListParams = {
-        customer: user.stripe_id
-    };
-    const subscriptions: Stripe.ApiList<Stripe.Subscription> = await stripe.subscriptions.list(subscriptionListOptions);
+    // const subscriptionListOptions: Stripe.SubscriptionListParams = {
+    //     customer: user.stripe_id
+    // };
+    // const subscriptions: Stripe.ApiList<Stripe.Subscription> = await stripe.subscriptions.list(subscriptionListOptions);
 
     // User has an existing plan. Update it.
-    if (subscriptions.data.length > 0) {
-        const subscription: Stripe.Subscription = await stripe.subscriptions.retrieve(subscriptions.data[0].id);
-        const updateOptions: Stripe.SubscriptionUpdateParams = {
-            cancel_at_period_end: false,
-            items: [{
-                id: subscription.items.data[0].id,
-                plan: getPlanId(planName)
-            }]
-        };
-        await stripe.subscriptions.update(subscription.id, updateOptions);
+    // if (subscriptions.data.length > 0) {
+    //     const subscription: Stripe.Subscription = await stripe.subscriptions.retrieve(subscriptions.data[0].id);
+    //     const updateOptions: Stripe.SubscriptionUpdateParams = {
+    //         cancel_at_period_end: false,
+    //         items: [{
+    //             id: subscription.items.data[0].id,
+    //             plan: getPlanId(planName)
+    //         }]
+    //     };
+    //     await stripe.subscriptions.update(subscription.id, updateOptions);
 
-    // User does not yet have a plan, create subscription.
-    } else {
-        const createOptions: Stripe.SubscriptionCreateParams = {
-            customer: user.stripe_id,
-            items: [{ plan: getPlanId(planName) }]
-        };
-        await stripe.subscriptions.create(createOptions);
-    }
+    // // User does not yet have a plan, create subscription.
+    // } else {
+    //     const createOptions: Stripe.SubscriptionCreateParams = {
+    //         customer: user.stripe_id,
+    //         items: [{ plan: getPlanId(planName) }]
+    //     };
+    //     await stripe.subscriptions.create(createOptions);
+    // }
 
     // Store the planId and planDescription with the user.
     await User.updateById(user.id, {
         stripe_plan_id: getPlanId(planName),
         stripe_plan_description: planName
     });
+
+    console.log("planName", planName)
+    console.log("User", User)
 }
 
 export async function addCardToCustomer(userId: number, token: string, cardId: string): Promise<void> {

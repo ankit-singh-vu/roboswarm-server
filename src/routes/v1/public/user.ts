@@ -63,8 +63,8 @@ router.route("/")
                 groupId: newUser.group.id,
                 email: newUser.email
             };
-            // await Stripe.createStripeCustomer(newUser);
-            // await Stripe.setStripePlan(newUser.id, "2020-roboswarm-free");
+            await Stripe.createStripeCustomer(newUser);
+            await Stripe.setStripePlan(newUser.id, "2020-roboswarm-free");
             // sendEmail({
             //     to: process.env.ROBOSWARM__ADMIN_EMAIL,
             //     from: process.env.ROBOSWARM__ADMIN_EMAIL,
