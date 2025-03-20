@@ -86,7 +86,7 @@ export async function canCreateSwarm(user: User, swarm: Swarm.NewSwarm, isReliab
         const numberOfMachinesToCreate: number = Math.ceil(swarm.machines.length / 2);
         if (!(await isValidSite(user, swarm))) {
             return {
-                err: "The site has not been verified. If your load test is for more than 5 simulated users, you must verify your ownership of the site.",
+                err: "The site has not been verified. If your load test is for more than 5 simulated users, you must verify your ownership of the site. Please verify your site and try again.",
                 status: 400
             };
         }
