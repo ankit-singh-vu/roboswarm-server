@@ -84,19 +84,19 @@ export async function isValidSite(user: User, swarm: Swarm.NewSwarm): Promise<bo
 export async function canCreateSwarm(user: User, swarm: Swarm.NewSwarm, isReliabilityTest: boolean): Promise<RoboError|boolean> {
     try {
         const numberOfMachinesToCreate: number = Math.ceil(swarm.machines.length / 2);
-        // if (!(await isValidSite(user, swarm))) {
-        //     return {
-        //         err: "The site has not been verified. If your load test is for more than 5 simulated users, you must verify your ownership of the site. Please verify your site and try again. If you have already verified your site, please contact support.",
-        //         status: 400
-        //     };
-        // }
+        if (!(await isValidSite(user, swarm))) {
+            return {
+                err: "The site has not been verified. If your load test is for more than 5 simulated users, you must verify your ownership of the site. Please verify your site and try again. If you have already verified your site, please contact support.",
+                status: 400
+            };
+        }
 
-        // if (await Swarm.willExceedDropletPoolAvailability(numberOfMachinesToCreate)) {
-        //     return {
-        //         err: "This request will exceed the resources that RoboSwarm has available. Our team has been notified.",
-        //         status: 500
-        //     };
-        // }
+        if (await Swarm.willExceedDropletPoolAvailability(numberOfMachinesToCreate)) {
+            return {
+                err: "This request will exceed the resources that RoboSwarm has available. Our team has been notified.",
+                status: 500
+            };
+        }
 
         const swarmMachineMinutes: number = swarm.duration * numberOfMachinesToCreate;
         if (await willExceedMaxMachineHours(user, swarmMachineMinutes)) {
