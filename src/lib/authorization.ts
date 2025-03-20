@@ -137,7 +137,8 @@ export async function canCreateSwarm(user: User, swarm: Swarm.NewSwarm, isReliab
 
         return true;
     } catch (err) {
-        console.error(err);
+        console.error("error in canCreateSwarm", err);
+
         return {
             err: "There was error verifying your account status.",
             status: 500
