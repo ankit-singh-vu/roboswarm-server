@@ -322,8 +322,8 @@ router.route("/")
         // Always add one machine to the pool so it can be master.
         req.body.machines.push({ region: req.body.machines[0].region });
         const user: User.User = await User.getById(req.auth.id);
-        // const canProceed: boolean|RoboError = await canCreateSwarm(user, req.body, req.body.reliability_test);
-        const canProceed: boolean | RoboError = true;
+        const canProceed: boolean|RoboError = await canCreateSwarm(user, req.body, req.body.reliability_test);
+        // const canProceed: boolean | RoboError = true;
         if (canProceed !== true) {
             console.log("inside if canProceed");
             const err = canProceed as RoboError;
