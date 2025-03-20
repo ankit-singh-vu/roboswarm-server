@@ -91,12 +91,12 @@ export async function canCreateSwarm(user: User, swarm: Swarm.NewSwarm, isReliab
             };
         }
 
-        if (await Swarm.willExceedDropletPoolAvailability(numberOfMachinesToCreate)) {
-            return {
-                err: "This request will exceed the resources that RoboSwarm has available. Our team has been notified.",
-                status: 500
-            };
-        }
+        // if (await Swarm.willExceedDropletPoolAvailability(numberOfMachinesToCreate)) {
+        //     return {
+        //         err: "This request will exceed the resources that RoboSwarm has available. Our team has been notified.",
+        //         status: 500
+        //     };
+        // }
 
         const swarmMachineMinutes: number = swarm.duration * numberOfMachinesToCreate;
         if (await willExceedMaxMachineHours(user, swarmMachineMinutes)) {
