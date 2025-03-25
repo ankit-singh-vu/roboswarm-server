@@ -103,7 +103,10 @@ export async function processSwarmProvisionEvent(event: SwarmProvisionEvent): Pr
                 }
                 case SwarmSetupStep.READY: {
                     // Has it been destroyed?
+                    console.log("SwarmSetupStep.READY");
                     const swarm: Swarm.Swarm = await Swarm.getById(event.createdSwarm.id);
+                    // console.log("swarm", swarm);
+                    console.log(JSON.stringify(swarm, null, 2));
                     if (swarm.destroyed_at) {
                         console.log(`Swarm ${swarm.id} is destroyed. Stopping.`);
                         return;
