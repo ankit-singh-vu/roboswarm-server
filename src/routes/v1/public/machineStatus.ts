@@ -121,6 +121,7 @@ router.route("/:id/is-swarm-ready")
     .get(async (req: interfaces.MachineIsSwarmReadyRequest, res: interfaces.IsSwarmReadyResponse) => {
         const swarmId = await SwarmMachine.getSwarmIdByMachineId(Number(req.params.id));
         const ready = await Swarm.swarmReady(swarmId);
+        console.log("Swarm ready: ", ready);
         res.status(200);
         res.json({
             is_swarm_ready: ready
