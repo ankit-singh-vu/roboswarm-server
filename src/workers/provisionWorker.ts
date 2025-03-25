@@ -9,6 +9,11 @@ import {
     processMachineProvisionEvent
 } from "../lib/setupHelpers";
 
+console.log("process.env");
+
+console.log(JSON.stringify(process.env, null, 2));
+
+
 console.log("inside provisionWorker");
 console.log("Starting worker process with 10 threads...");
 (() => {
