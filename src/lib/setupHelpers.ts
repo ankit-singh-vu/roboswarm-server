@@ -124,9 +124,9 @@ export async function processSwarmProvisionEvent(event: SwarmProvisionEvent): Pr
                                 await Machine.update(masterId, { is_master: true });
                             }
 
-                            console.log(`Swarm ${event.createdSwarm.id} not ready. Waiting 5 seconds`);
+                            console.log(`Swarm ${event.createdSwarm.id} not ready. Waiting 20 seconds`);
                             const delayTime = new Date();
-                            delayTime.setSeconds(delayTime.getSeconds() + 5);
+                            delayTime.setSeconds(delayTime.getSeconds() + 20);
                             event.delayUntil = delayTime;
                             event.steps.unshift(SwarmSetupStep.READY);
                             event.steps.unshift(SwarmSetupStep.DELAY);
