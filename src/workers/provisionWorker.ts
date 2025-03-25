@@ -9,7 +9,7 @@ import {
     processMachineProvisionEvent
 } from "../lib/setupHelpers";
 
-
+console.log("inside provisionWorker");
 console.log("Starting worker process with 10 threads...");
 (() => {
     let threadPool = 10;
