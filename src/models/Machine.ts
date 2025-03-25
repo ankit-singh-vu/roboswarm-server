@@ -100,6 +100,7 @@ export async function checkStatus(machine: Machine): Promise<DropletResponse> {
 // Starts the creation of machine on Digital Ocean. Should only ever be used
 // in conjunction with creating a machine on RoboSwarm.
 async function createDigitalOceanMachine(machineId: number, region: string, digitalOceanSSHKeyId: number): Promise<DropletResponse> {
+    console.log("inside createDigitalOceanMachine");
     const headers = {
         Authorization: `Bearer ${process.env.ROBOSWARM__DIGITAL_OCEAN_TOKEN}`,
         "Content-Type": "application/json"
@@ -125,6 +126,9 @@ async function createDigitalOceanMachine(machineId: number, region: string, digi
         body,
         headers
     };
+
+    console.log("options");
+    console.log(options);
     return httpRequest<DropletResponse>(options);
 }
 
