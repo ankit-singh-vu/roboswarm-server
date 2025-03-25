@@ -105,14 +105,17 @@ export async function processSwarmProvisionEvent(event: SwarmProvisionEvent): Pr
                     // Has it been destroyed?
                     console.log("SwarmSetupStep.READY");
                     const swarm: Swarm.Swarm = await Swarm.getById(event.createdSwarm.id);
-                    // console.log("swarm", swarm);
-                    console.log(JSON.stringify(swarm, null, 2));
+                    
                     if (swarm.destroyed_at) {
                         console.log(`Swarm ${swarm.id} is destroyed. Stopping.`);
                         return;
                     } else {
                         const isSwarmReady: boolean = await Swarm.swarmReady(event.createdSwarm.id);
                         if (!isSwarmReady) {
+
+                            const machines = await SwarmMachine.getSwarmMachines(event.createdSwarm.id);
+                            console.log("Swarm 2 Machines:", JSON.stringify(machines, null, 2));
+
                             // If it has been 20 seconds since the swarm was provisioned,
                             // set is_master on at least one of the machines.
                             const now = moment();
