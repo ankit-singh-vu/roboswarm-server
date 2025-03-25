@@ -19,6 +19,8 @@ import { Status } from "../interfaces/shared.interface";
 import * as swarmProvisionEvents from "./swarmProvisionEvents";
 import * as moment from "moment";
 
+console.log("inside setupHelpers");
+
 export async function nextStep(event: MachineProvisionEvent|SwarmProvisionEvent) {
     if (event.steps.length > 0) {
         const nextStep = event.steps.shift();
