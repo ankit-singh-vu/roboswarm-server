@@ -197,8 +197,8 @@ router.route("/:id/repeat")
         const user: User.User = await User.getById(req.auth.id);
         const isReliabilityTest = !!(newSwarm.simulated_users <= 25 && newSwarm.duration > 120);
         newSwarm.site_id = await SiteOwnership.getSiteIdByBaseUrl(newSwarm.host_url, user.id, user.group.id) as number;
-        // const canProceed: boolean | RoboError = await canCreateSwarm(user, newSwarm, isReliabilityTest);
-        const canProceed: boolean | RoboError = true;
+        const canProceed: boolean | RoboError = await canCreateSwarm(user, newSwarm, isReliabilityTest);
+        // const canProceed: boolean | RoboError = true;
         if (canProceed !== true) {
             const err = canProceed as RoboError;
             res.status(err.status);
@@ -322,8 +322,8 @@ router.route("/")
         // Always add one machine to the pool so it can be master.
         req.body.machines.push({ region: req.body.machines[0].region });
         const user: User.User = await User.getById(req.auth.id);
-        // const canProceed: boolean|RoboError = await canCreateSwarm(user, req.body, req.body.reliability_test);
-        const canProceed: boolean | RoboError = true;
+        const canProceed: boolean|RoboError = await canCreateSwarm(user, req.body, req.body.reliability_test);
+        // const canProceed: boolean | RoboError = true;
         if (canProceed !== true) {
             console.log("inside if canProceed");
             const err = canProceed as RoboError;
