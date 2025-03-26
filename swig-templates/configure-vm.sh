@@ -1,5 +1,6 @@
 #!/bin/sh
 
+source /root/myenv/bin/activate
 # Disable ipv6
 echo "Disabling IPv6"
 sysctl -w net.ipv6.conf.all.disable_ipv6=1
