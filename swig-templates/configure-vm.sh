@@ -6,8 +6,15 @@ echo "Disabling IPv6"
 sysctl -w net.ipv6.conf.all.disable_ipv6=1
 sysctl -w net.ipv6.conf.default.disable_ipv6=1
 
+# Log output
+exec > /root/init.log 2>&1
+set -x
+
 # Go to /root
 cd /root
+
+# Export PATH for pipx-installed Locust
+export PATH="/root/.local/bin:$PATH"
 
 # Set ready and ip for this machine
 MYIP=$(ip -o route get to 8.8.8.8 | sed -n 's/.*src \([0-9.]\+\).*/\1/p')
