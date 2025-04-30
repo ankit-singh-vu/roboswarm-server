@@ -83,8 +83,16 @@ class WooCommerceSequence(SequentialTaskSet):
 
         # Extract the checkout none from the form.
         page_content = response.content
+        # result = re.search(
+        #     br"id=\"woocommerce-process-checkout-nonce\"\s* name=\"woocommerce-process-checkout-nonce\"\s* value=\"(\w+)\"", page_content)
         result = re.search(
-            br"id=\"woocommerce-process-checkout-nonce\"\s* name=\"woocommerce-process-checkout-nonce\"\s* value=\"(\w+)\"", page_content)
+            br'id="woocommerce-process-checkout-nonce"\s*name="woocommerce-process-checkout-nonce"\s*value="(\w+)"',
+            page_content
+        )
+        if not result:
+            print("❌ checkout nonce not found!")
+            print(response.text[:500])  # print a snippet to debug
+            return  # or skip, or handle the error gracefully
         checkout_nonce = result.group(1)
 
         # Data for update_order_review_nonce
